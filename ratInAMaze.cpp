@@ -23,7 +23,7 @@ void dfs( int i, int j, vector<vector<int>>& g, string& s, vector<string>& all )
     g[i][j] = 1;
 }
 
- vector<string> findPath(vector<vector<int>> &m, int n) {
+vector<string> findPath(vector<vector<int>> &m, int n) {
         if (!m[0][0] || !m.back().back())
             return {};
         string g = "";
