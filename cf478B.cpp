@@ -1,27 +1,36 @@
 #include<bits/stdc++.h>
-#define ll unsigned long long int
 using namespace std;
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    ll n, m;
+    int n, m;
     cin >> n >> m;
-    if (m==1)
-        {
-            ll v = (n*(n-1))/2;
-            cout << v << " " << v;
-        }
-    else
+    vector<unordered_map<string,string>> w(2);
+    string a, b;
+    for ( int i=0; i<m; i++ )
     {
-        ll mv = (n-(m-1));
-        ll maxv = (mv*(mv-1))/2;
-        ll each = n/m;
-        ll minv = ((each*(each-1))/2)*(m-1);
-        ll last = n/m + n%m;
-        minv += (last*(last-1))/2;
-        cout << minv << " " << maxv;
+        cin >> a >> b;
+        w[0][a] = b;
+        w[1][b] = b;
     }
+    vector<string> s(n);
+    for ( int i=0; i<n; i++ )
+        cin >> s[i];
+    for ( auto c : s )
+    {
+        string cur = c;
+            if (w[0].find(cur)==w[0].end())
+            {
+                if (w[1][cur].size() <= cur.size())
+                    cur = w[1][cur];
+            }
+            else
+            {
+                if (w[0][cur].size() < cur.size())
+                    cur = w[0][cur];
+            }
+        cout << cur << " ";
+    }
+
     return 0;
 }
