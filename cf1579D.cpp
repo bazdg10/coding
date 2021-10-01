@@ -1,46 +1,62 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+vector<pair<int,int>> dfs(int i, int j, vector<vector<char>>& m)
+{
+    vector<pair<int,int>> res;
+    res.push_back({i, j});
+    int di = i-1;
+    int lj = j-1;
+    int rj = j+1;
+    while(di>=0 && lj>=0 && rj<m[0].size() && m[di][lj] == '*' && m[di][rj]=='*')
+    {
+        res.push_back({di, lj});
+        res.push_back({di, rj});
+        di--;
+        lj--;
+        rj++;
+    }
+return res;
+}
+
 int main()
 {
+
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     int t;
     cin >> t;
     while(t--)
     {
-        int n;
-        cin >> n;
-        vector<int> a(n);
+        int n, m, k;
+        cin >> n >> m >> k;
+        vector<vector<char>> init(n, vector<char>(m));
+        vector<vector<char>> fin(n, vector<char>(m, '.'));
+        string s;
         for ( int i=0; i<n; i++ )
-            cin >> a[i];
-        priority_queue<pair<int,int>> q;
-        for (int i=0; i<n; i++)
-            q.push({a[i], i+1});
-        
-        vector<vector<int>> talks;
-        int k = 0;
-        while(q.size()>1)
-        {
-            auto p1 = q.top();
-            q.pop();
-            auto p2 = q.top();
-            q.pop();
-            int dur = min ( p1.first, p2.first );
-            p1.first -= dur;
-            p2.first -= dur;
-            k += dur;
-            talks.push_back({p1.second, p2.second, dur});
-            if (p1.first!=0)
-                q.push(p1);
-            if (p2.first!=0)
-                q.push(p2);
-        }
-        cout << k << "\n";
-        for ( auto c : talks )
-            while(c[2]--)
-                cout << c[0] << " " << c[1] << "\n"; 
+            {
+                cin >> s;
+                for ( int j=0; j<m; j++ )   
+                    init[i][j] = s[j];
+            }
+        for ( int i=0; i<n; i++ )
+            {
+                for ( int j=0; j<m; j++ )
+                {
+                    if (init[i][j]!='*')    continue;
+                    vector<pair<int,int>> mark = dfs(i, j, init);
+                    if (mark.size() >= 2*k + 1)
+                    {
+                        for ( auto p : mark )
+                        {
+                            fin[p.first][p.second] = '*';
+                        }
+                    }                    
+                }
+            }
+        if (fin==init)
+            cout << "YES\n";
+        else cout << "NO\n";
     }
-
     return 0;
 }
